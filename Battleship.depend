@@ -1,0 +1,57 @@
+# depslib dependency file v1.0
+1478628908 source:/home/user/Dropbox/CSCI1310/Battleship/main.cpp
+	"Board.h"
+	"Ship.h"
+	"Player.h"
+	"Computer.h"
+	<iostream>
+	<stdlib.h>
+	<fstream>
+	<sstream>
+
+1478578627 source:/home/user/Dropbox/CSCI1310/Battleship/src/Board.cpp
+	"Board.h"
+	<iostream>
+	<string>
+	<sstream>
+
+1477618280 /home/user/Dropbox/CSCI1310/Battleship/include/Board.h
+	<iostream>
+
+1477668592 source:/home/user/Dropbox/CSCI1310/Battleship/src/Player.cpp
+	"Player.h"
+	"Ship.h"
+	<iostream>
+	<fstream>
+	<vector>
+
+1477951937 /home/user/Dropbox/CSCI1310/Battleship/include/Player.h
+	"Board.h"
+	"Ship.h"
+	<iostream>
+
+1477616110 source:/home/user/Dropbox/CSCI1310/Battleship/src/Ship.cpp
+	"Ship.h"
+	<vector>
+	<iostream>
+	<locale>
+
+1477616110 /home/user/Dropbox/CSCI1310/Battleship/include/Ship.h
+	<iostream>
+	<vector>
+
+1477618881 source:/home/user/Dropbox/CSCI1310/Battleship/src/PlayerInfo.cpp
+	"PlayerInfo.h"
+
+1477618872 /home/user/Dropbox/CSCI1310/Battleship/include/PlayerInfo.h
+	<iostream>
+
+1477951937 source:/home/user/Dropbox/CSCI1310/Battleship/src/Computer.cpp
+	"Computer.h"
+	<iostream>
+	<vector>
+
+1477623766 /home/user/Dropbox/CSCI1310/Battleship/include/Computer.h
+	"Player.h"
+	<iostream>
+
