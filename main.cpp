@@ -14,7 +14,6 @@ using namespace std;
 Ryan Loi
 TA: Camilla
 10/27/16
-test
 */
 
 int main()
