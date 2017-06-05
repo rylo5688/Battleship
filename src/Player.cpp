@@ -1,5 +1,5 @@
-#include "Player.h"
-#include "Ship.h"
+#include "../include/Player.h"
+#include "../include/Ship.h"
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -338,4 +338,3 @@ void Player::clearScreen(){
         cout<<endl;
         cout<<endl;
 }
-

@@ -1,4 +1,4 @@
-#include "PlayerInfo.h"
+#include "../include/PlayerInfo.h"
 
 PlayerInfo::PlayerInfo(string n)
 {
@@ -11,4 +11,3 @@ PlayerInfo::~PlayerInfo()
 {
     //dtor
 }
-

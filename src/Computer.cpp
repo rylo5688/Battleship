@@ -1,4 +1,4 @@
-#include "Computer.h"
+#include "../include/Computer.h"
 #include <iostream>
 #include <vector>
 

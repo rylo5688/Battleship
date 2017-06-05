@@ -1,4 +1,4 @@
-#include "Ship.h"
+#include "../include/Ship.h"
 #include <vector>
 #include <iostream>
 #include <locale>

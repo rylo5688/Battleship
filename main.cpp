@@ -1,7 +1,8 @@
-#include "Board.h"
-#include "Ship.h"
-#include "Player.h"
-#include "Computer.h"
+#include "include/Board.h"
+#include "include/Ship.h"
+#include "include/Player.h"
+#include "include/Computer.h"
+#include "include/PlayerInfo.h"
 
 #include <iostream>
 #include <stdlib.h>
