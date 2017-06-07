@@ -8,13 +8,15 @@ using namespace std;
 class Computer: public Player
 {
     public:
-        Computer(string);
+        Computer();
         virtual ~Computer();
         void createBoard();
         void printName();
+        void generateCoords(int *x, int *y);
+        string generateDirection();
+        void generatePlacement(string dir, int *xPtr, int *yPtr, int length, int sIndex);
     protected:
     private:
-        string level;
 };
 
 #endif // COMPUTER_H

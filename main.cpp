@@ -17,47 +17,54 @@ TA: Camilla
 10/27/16
 */
 
+void initialize(string file, Player* one, Player* two, Computer* c){
+  ifstream shipData;
+  shipData.open(file);
+  if(shipData.fail()){
+      cout<<"something went wrong"<<endl;
+  }
+  else{
+      string line;
+
+      ///getting all the ship names and sizes from Ships.txt
+      while(getline(shipData, line, '\n')){
+          string word;
+          stringstream ss;
+          ss<<line;
+
+          string name;
+          int length;
+
+          int index = 0;
+          while(getline(ss, word, ',')){
+              if (index == 0){ //ship's name
+                  name = word;
+              }
+              else if(index == 1){ //ship's length
+                  length = atoi(word.c_str());
+              }
+              index++;
+          }
+          Ship temp(name, length);
+
+          one->addShip(temp);
+          two->addShip(temp);
+          c->addShip(temp);
+      }
+  }
+}
+
 int main()
 {
     cout<<"Welcome to BattleShip!"<<endl;
     Player p1;
     Player p2;
+    Computer computer;
 
-    Computer c1("Medium"); //computer class isn't done will be implemented later
+    initialize("Ships.txt", &p1, &p2, &computer);
 
-    ifstream shipData;
-    shipData.open("Ships.txt");
-    if(shipData.fail()){
-        cout<<"something went wrong"<<endl;
-    }
-    else{
-        string line;
-
-        ///getting all the ship names and sizes from Ships.txt
-        while(getline(shipData, line, '\n')){
-            string word;
-            stringstream ss;
-            ss<<line;
-
-            string name;
-            int length;
-
-            int index = 0;
-            while(getline(ss, word, ',')){
-                if (index == 0){ //ship's name
-                    name = word;
-                }
-                else if(index == 1){ //ship's length
-                    length = atoi(word.c_str());
-                }
-                index++;
-            }
-            Ship temp(name, length);
-
-            p1.addShip(temp);
-            p2.addShip(temp);
-        }
-    }
+    computer.createBoard();
+    computer.printPBoard();
 
     ///to ask if player wants to play
     string play;

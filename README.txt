@@ -1,6 +1,9 @@
 Ryan Loi
 10/27/16
 
+Compile: g++ -std=c++11 main.cpp src/Ship.cpp src/Player.cpp src/PlayerInfo.cpp src/Board.cpp src/Computer.cpp -o Battleship
+Run: ./Battleship 
+
 Best if played with the terminal at 80x31 pixels
 
 This game is Battleship!
@@ -9,12 +12,12 @@ Since there is only a two player mode right now the game goes like this...
 Both players have 5 ships and must place their ships on their 10x10 board.
 The axis' are labeled and the players must enter in the coordinates of where they'd like to place the beginning of their ship.
 Once the player has decided where the beginning of their ship will be placed they will the pick which direction the rest of the ship will go.
-The game makes sure that no ship is placed on top of another and that all of the ship is placed within the coordinate system. 
+The game makes sure that no ship is placed on top of another and that all of the ship is placed within the coordinate system.
 
 After both players have created their boards that game begins!
 The game will notify which players turn it is and when it's your turn you'll see two boards.
-I'm gonna assume you know what battleship and give a brief explanation of what's shown. 
-One board on top that is the enemies board as a concealed version (doesn't show the ships) and one board on the bottom that 
+I'm gonna assume you know what battleship and give a brief explanation of what's shown.
+One board on top that is the enemies board as a concealed version (doesn't show the ships) and one board on the bottom that
 you board. The player must enter in a target on the enemies board, but targets will show up on both boards and "M"s and "X"s.
 X's are hits and M's are misses.
 
