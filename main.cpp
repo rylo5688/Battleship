@@ -54,21 +54,9 @@ void initialize(string file, Player* one, Player* two, Computer* c){
   }
 }
 
-int main()
-{
-    cout<<"Welcome to BattleShip!"<<endl;
-    Player p1;
-    Player p2;
-    Computer computer;
-
-    initialize("Ships.txt", &p1, &p2, &computer);
-
-    computer.createBoard();
-    computer.printPBoard();
-
-    ///to ask if player wants to play
+bool playDecision(){
     string play;
-    bool game;
+
     cout<<"Would you like to play(Y/N)? "<<endl;
     getline(cin, play);
     while (play != "y" and play != "Y" and play != "n" and play != "N"){
@@ -79,170 +67,221 @@ int main()
     }
 
     if (play == "y" or play == "Y"){
-        game = true;
+        return true;
     }
     else if (play == "n" or play == "N"){
-        game = false;
         cout<<"Boooooooooo"<<endl;
+        return false;
+    }
+}
+
+int gameTypeDecision(){
+    int decision;
+
+    cout << "Do you want to play Single Player(1) or Multiplayer(2)" << endl;
+    cin >> decision;
+    while (decision != 1 and decision != 2){
+        cout<<endl;
+        cout << "---Invalid Input---" << endl;
+        cout << "Do you want to play Single Player(1) or Multiplayer(2)" << endl;
+        cin >> decision;
+    }
+
+    cin.ignore();
+    cin.clear();
+    return decision;
+}
+
+void multiplayerGame(Player p1, Player p2){
+  bool win = false;
+  ///game begins here
+  int turn = 1;
+  while(!win){
+      //5 line buffer
+      cout<<endl;
+      cout<<endl;
+      cout<<endl;
+      cout<<endl;
+      cout<<endl;
+
+      string pMove;
+      if (turn%2==1){ //Player One's turn
+          cout<<endl;
+          cout<<"It's PLAYER ONE's turn"<<endl;
+
+          cout<<endl;
+          cout<<"  --ENEMIES BOARD--"<<endl;
+          p2.printRBoard();
+          cout<<"--------------------"<<endl;
+          p1.printPBoard();
+          cout<<"   --P1's BOARD--"<<endl;
+
+          cout<<endl;
+          cout<<"Enter a target(Ex. A3): "<<endl;
+          getline(cin, pMove);
+          int x;
+          int *xPointer = &x;
+          int y;
+          int *yPointer = &y;
+
+          //attacking the other player
+          while(!p2.checkTarget(pMove, xPointer, yPointer)){
+              cout<<endl;
+              cout<<" ---Invalid Target---"<<endl;
+              cout<<"Enter a target(Ex. A3): "<<endl;
+              getline(cin, pMove);
+          }
+          //they have a valid target
+          cout<<p2.checkMove(x, y)<<endl;
+          if (p2.getShipCount() == 0){ //that means player one has won
+              win = true;
+          }
+      }
+
+      else if(turn%2==0){ //Player Two's turn
+          cout<<endl;
+          cout<<"It's PLAYER TWO's turn"<<endl;
+
+          cout<<endl;
+          cout<<"  --ENEMIES BOARD--"<<endl;
+          p1.printRBoard();
+          cout<<"--------------------"<<endl;
+          p2.printPBoard();
+          cout<<"   --P2's BOARD--"<<endl;
+
+          cout<<endl;
+          cout<<"Enter a target(Ex. A3): "<<endl;
+          getline(cin, pMove);
+          int x;
+          int *xPointer = &x;
+          int y;
+          int *yPointer = &y;
+
+          //attacking the other player
+          while(!p1.checkTarget(pMove, xPointer, yPointer)){
+              cout<<endl;
+              cout<<" ---Invalid Target---"<<endl;
+              cout<<"Enter a target(Ex. A3): "<<endl;
+              getline(cin, pMove);
+          }
+          //they have a valid target
+          cout<<p1.checkMove(x, y)<<endl;
+          if (p1.getShipCount() == 0){ //that means player two has won
+              win = true;
+          }
+
+      }
+
+      string moveOn;
+      cout<<"Enter 'Y' to move onto the next turn: "<<endl;
+      getline(cin, moveOn);
+      while (moveOn != "Y" and !win){
+          cout<<"Enter 'Y' to move onto the next turn: "<<endl;
+          getline(cin, moveOn);
+      }
+
+      //5 line buffer
+      cout<<endl;
+      cout<<endl;
+      cout<<endl;
+      cout<<endl;
+      cout<<endl;
+
+      if (!win){
+          turn++;
+      }
+  }
+  //somebody has won!
+  if (turn%2==1){ //Player 1 has won
+      cout<<"Player One has won the game! "<<endl;
+      cout<<"Would you like to enter a name to add to the list of winners(Y/N): "<<endl;
+      string answer;
+      getline(cin, answer);
+      while (answer != "Y" and answer != "y" and answer != "N" and answer != "n"){
+          cout<<"Would you like to enter a name to add to the list of winners(Y/N): "<<endl;
+          getline(cin, answer);
+      }
+      if (answer == "y" or answer == "Y"){
+          string name;
+          cout<<"Enter your name: "<<endl;
+          getline(cin, name);
+          ofstream winners("winners.txt", ios::app);
+          winners<<name;
+          winners.close();
+          cout<<"Thanks for playing!"<<endl;
+      }
+      else{
+          cout<<"Thanks for playing!"<<endl;
+      }
+  }
+  else if (turn%2==0){ //Player 2 has won the game
+      cout<<"Player Two has won the game! "<<endl;
+      cout<<"Would you like to enter a name to add to the list of winners(Y/N): "<<endl;
+      string answer;
+      getline(cin, answer);
+      while (answer != "Y" and answer != "y" and answer != "N" and answer != "n"){
+          cout<<"Would you like to enter a name to add to the list of winners(Y/N): "<<endl;
+          getline(cin, answer);
+      }
+      if (answer == "y" or answer == "Y"){
+          string name;
+          cout<<"Enter your name: "<<endl;
+          getline(cin, name);
+          ofstream winners("winners.txt", ios::app);
+          winners<<name;
+          winners.close();
+          cout<<"Thanks for playing!"<<endl;
+      }
+      else{
+          cout<<"Thanks for playing!"<<endl;
+      }
+  }
+}
+
+int main()
+{
+    cout<<"Welcome to BattleShip!"<<endl;
+    Player p1;
+    Player p2;
+    Computer computer;
+
+    initialize("Ships.txt", &p1, &p2, &computer);
+
+    ///to ask if player wants to play
+    bool game = playDecision(); //true if player wants to play and false otherwise
+
+    if (game){
+
+    } else {
+      exit(0);
     }
 
     //Players creating their boards
-
     if (game){
-        cout<<endl;
-        cout<<"Player One's turn to place their ships!"<<endl;
-        p1.createBoard();
-        cout<<endl;
-        p1.clearScreen();
-        cout<<"Player Two's turn to place their ships!"<<endl;
-        p2.createBoard();
-        p1.clearScreen();
+        int gameType = gameTypeDecision();
+
+        if (gameType == 1){ //single player
+            computer.createBoard();
+            cout<<endl;
+            cout << "BattleAI has placed their ships!" << endl;
+            cout<<endl;
+            cout << "Player One's turn to place their ships!" << endl;
+            p1.createBoard();
+            cout<<endl;
+        } else { //multiplayer
+            cout<<endl;
+            cout << "Player One's turn to place their ships!" << endl;
+            p1.createBoard();
+            cout<<endl;
+            p1.clearScreen();
+            cout << "Player Two's turn to place their ships!" << endl;
+            p2.createBoard();
+            p1.clearScreen();
+
+            multiplayerGame(p1, p2);
+        }
     }
 
-
-    bool win = false;
-    ///game begins here
-    int turn = 1;
-    while(game and !win){
-        //5 line buffer
-        cout<<endl;
-        cout<<endl;
-        cout<<endl;
-        cout<<endl;
-        cout<<endl;
-
-        string pMove;
-        if (turn%2==1){ //Player One's turn
-            cout<<endl;
-            cout<<"It's PLAYER ONE's turn"<<endl;
-
-            cout<<endl;
-            cout<<"  --ENEMIES BOARD--"<<endl;
-            p2.printRBoard();
-            cout<<"--------------------"<<endl;
-            p1.printPBoard();
-            cout<<"   --P1's BOARD--"<<endl;
-
-            cout<<endl;
-            cout<<"Enter a target(Ex. A3): "<<endl;
-            getline(cin, pMove);
-            int x;
-            int *xPointer = &x;
-            int y;
-            int *yPointer = &y;
-
-            //attacking the other player
-            while(!p2.checkTarget(pMove, xPointer, yPointer)){
-                cout<<endl;
-                cout<<" ---Invalid Target---"<<endl;
-                cout<<"Enter a target(Ex. A3): "<<endl;
-                getline(cin, pMove);
-            }
-            //they have a valid target
-            cout<<p2.checkMove(x, y)<<endl;
-            if (p2.getShipCount() == 0){ //that means player one has won
-                win = true;
-            }
-        }
-
-        else if(turn%2==0){ //Player Two's turn
-            cout<<endl;
-            cout<<"It's PLAYER TWO's turn"<<endl;
-
-            cout<<endl;
-            cout<<"  --ENEMIES BOARD--"<<endl;
-            p1.printRBoard();
-            cout<<"--------------------"<<endl;
-            p2.printPBoard();
-            cout<<"   --P2's BOARD--"<<endl;
-
-            cout<<endl;
-            cout<<"Enter a target(Ex. A3): "<<endl;
-            getline(cin, pMove);
-            int x;
-            int *xPointer = &x;
-            int y;
-            int *yPointer = &y;
-
-            //attacking the other player
-            while(!p1.checkTarget(pMove, xPointer, yPointer)){
-                cout<<endl;
-                cout<<" ---Invalid Target---"<<endl;
-                cout<<"Enter a target(Ex. A3): "<<endl;
-                getline(cin, pMove);
-            }
-            //they have a valid target
-            cout<<p1.checkMove(x, y)<<endl;
-            if (p1.getShipCount() == 0){ //that means player two has won
-                win = true;
-            }
-
-        }
-
-        string moveOn;
-        cout<<"Enter 'Y' to move onto the next turn: "<<endl;
-        getline(cin, moveOn);
-        while (moveOn != "Y" and !win){
-            cout<<"Enter 'Y' to move onto the next turn: "<<endl;
-            getline(cin, moveOn);
-        }
-
-        //5 line buffer
-        cout<<endl;
-        cout<<endl;
-        cout<<endl;
-        cout<<endl;
-        cout<<endl;
-
-        if (!win){
-            turn++;
-        }
-    }
-    //somebody has won!
-    if (turn%2==1){ //Player 1 has won
-        cout<<"Player One has won the game! "<<endl;
-        cout<<"Would you like to enter a name to add to the list of winners(Y/N): "<<endl;
-        string answer;
-        getline(cin, answer);
-        while (answer != "Y" and answer != "y" and answer != "N" and answer != "n"){
-            cout<<"Would you like to enter a name to add to the list of winners(Y/N): "<<endl;
-            getline(cin, answer);
-        }
-        if (answer == "y" or answer == "Y"){
-            string name;
-            cout<<"Enter your name: "<<endl;
-            getline(cin, name);
-            ofstream winners("winners.txt", ios::app);
-            winners<<name;
-            winners.close();
-            cout<<"Thanks for playing!"<<endl;
-        }
-        else{
-            cout<<"Thanks for playing!"<<endl;
-        }
-    }
-    else if (turn%2==0){ //Player 2 has won the game
-        cout<<"Player Two has won the game! "<<endl;
-        cout<<"Would you like to enter a name to add to the list of winners(Y/N): "<<endl;
-        string answer;
-        getline(cin, answer);
-        while (answer != "Y" and answer != "y" and answer != "N" and answer != "n"){
-            cout<<"Would you like to enter a name to add to the list of winners(Y/N): "<<endl;
-            getline(cin, answer);
-        }
-        if (answer == "y" or answer == "Y"){
-            string name;
-            cout<<"Enter your name: "<<endl;
-            getline(cin, name);
-            ofstream winners("winners.txt", ios::app);
-            winners<<name;
-            winners.close();
-            cout<<"Thanks for playing!"<<endl;
-        }
-        else{
-            cout<<"Thanks for playing!"<<endl;
-        }
-    }
 
     return 0;
 }
