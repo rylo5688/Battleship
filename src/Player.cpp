@@ -71,6 +71,7 @@ void Player::createBoard(){ //should be called after ships array has been initia
 
         cout<<endl;
         pBoard.printBoard();
+        cout<<endl;
         cout<<"Pick the coordinates where you'd like to place your ship(Ex. A3)! "<<endl;
         string coords;
         getline(cin, coords);
@@ -84,6 +85,7 @@ void Player::createBoard(){ //should be called after ships array has been initia
             cout<<endl;
             cout<<"---Invalid Input---"<<endl;
             pBoard.printBoard();
+            cout<<endl;
             cout<<"Pick the coordinates where you'd like to place your ship(Ex. A3)! "<<endl;
             getline(cin, coords);
         }
@@ -164,13 +166,8 @@ bool Player::checkCoords(string c, int *col, int *row){
 }
 
 bool Player::checkTarget(string c, int *col, int *row){
-    string xCoords = "ABCDEFGHIJ";int shipCount;
-        Board pBoard; //players board where they place their ships
-        Board rBoard; //revealed board to the other player that keeps track of their attacks
-        int index;
-        Ship ships[5];
+    string xCoords = "ABCDEFGHIJ";
     string yCoords = "0123456789";
-
     for (int x = 0; x < 10; x++){
         for (int y = 0; y < 10; y++){
             string temp = xCoords.substr(x, 1) + yCoords.substr(y, 1); //gets valid coordinates first one is A0
@@ -307,34 +304,12 @@ int Player::getShipCount(){
 }
 
 void Player::printName(){
-    cout<<name<<endl;
+    cout << name;
 }
 
 void Player::clearScreen(){
-        //5 line buffer
-        cout<<endl;
-        cout<<endl;
-        cout<<endl;
-        cout<<endl;
-        cout<<endl;
-        cout<<endl;
-        cout<<endl;
-        cout<<endl;
-        cout<<endl;
-        cout<<endl;
-        cout<<endl;
-        cout<<endl;
-        cout<<endl;
-        cout<<endl;
-        cout<<endl;
-        cout<<endl;
-        cout<<endl;
-        cout<<endl;
-        cout<<endl;
-        cout<<endl;
-        cout<<endl;
-        cout<<endl;
-        cout<<endl;
-        cout<<endl;
-        cout<<endl;
+    //5 line buffer
+    for (int i = 0; i < 24; i++){
+      cout<<endl;
+    }
 }

@@ -92,30 +92,63 @@ int gameTypeDecision(){
     return decision;
 }
 
-void singlePlayer(Player p1, Computer c){
-  bool win = false;
-
-  while(!win){
-    //5 line buffer
-    cout<<endl;
-    cout<<endl;
-    cout<<endl;
-    cout<<endl;
+//Function for printing x number of new lines
+void printNewLine(int x){
+  for (int i = 0; i < x; i++){
     cout<<endl;
   }
 }
 
-void multiplayerGame(Player p1, Player p2){
+void singlePlayerRun(Player *p1, Computer *c){
+  bool win = false;
+
+  string pMove;
+  while(!win){
+    printNewLine(6);
+    cout<<"It's PLAYER ONE's turn"<<endl;
+    cout<<endl;
+
+    cout<<"  --ENEMIES BOARD--"<<endl;
+    c->printRBoard();
+    cout<<"--------------------"<<endl;
+    p1->printPBoard();
+    cout<<"   --P1's BOARD--"<<endl;
+
+    cout<<endl;
+    cout<<"Enter a target(Ex. A3): "<<endl;
+
+    getline(cin, pMove);
+    int x;
+    int *xPointer = &x;
+    int y;
+    int *yPointer = &y;
+
+    //attacking the other player
+    while(!c->checkTarget(pMove, xPointer, yPointer)){
+        cout<<endl;
+        cout<<" ---Invalid Target---"<<endl;
+        cout<<"Enter a target(Ex. A3): "<<endl;
+        getline(cin, pMove);
+    }
+    //User has selected a valid target
+    cout<<c->checkMove(x, y)<<endl;
+    if (c->getShipCount() == 0){ //that means player one has won
+        win = true;
+    }
+
+    //Computer attack logic
+    printNewLine(3);
+    c->attack();
+    printNewLine(3);
+  }
+}
+
+void multiPlayerRun(Player *p1, Player *p2){
   bool win = false;
   ///game begins here
   int turn = 1;
   while(!win){
-      //5 line buffer
-      cout<<endl;
-      cout<<endl;
-      cout<<endl;
-      cout<<endl;
-      cout<<endl;
+      printNewLine(5);
 
       string pMove;
       if (turn%2==1){ //Player One's turn
@@ -124,9 +157,9 @@ void multiplayerGame(Player p1, Player p2){
 
           cout<<endl;
           cout<<"  --ENEMIES BOARD--"<<endl;
-          p2.printRBoard();
+          p2->printRBoard();
           cout<<"--------------------"<<endl;
-          p1.printPBoard();
+          p1->printPBoard();
           cout<<"   --P1's BOARD--"<<endl;
 
           cout<<endl;
@@ -138,15 +171,15 @@ void multiplayerGame(Player p1, Player p2){
           int *yPointer = &y;
 
           //attacking the other player
-          while(!p2.checkTarget(pMove, xPointer, yPointer)){
+          while(!p2->checkTarget(pMove, xPointer, yPointer)){
               cout<<endl;
               cout<<" ---Invalid Target---"<<endl;
               cout<<"Enter a target(Ex. A3): "<<endl;
               getline(cin, pMove);
           }
           //they have a valid target
-          cout<<p2.checkMove(x, y)<<endl;
-          if (p2.getShipCount() == 0){ //that means player one has won
+          cout<<p2->checkMove(x, y)<<endl;
+          if (p2->getShipCount() == 0){ //that means player one has won
               win = true;
           }
       }
@@ -157,9 +190,9 @@ void multiplayerGame(Player p1, Player p2){
 
           cout<<endl;
           cout<<"  --ENEMIES BOARD--"<<endl;
-          p1.printRBoard();
+          p1->printRBoard();
           cout<<"--------------------"<<endl;
-          p2.printPBoard();
+          p2->printPBoard();
           cout<<"   --P2's BOARD--"<<endl;
 
           cout<<endl;
@@ -171,15 +204,15 @@ void multiplayerGame(Player p1, Player p2){
           int *yPointer = &y;
 
           //attacking the other player
-          while(!p1.checkTarget(pMove, xPointer, yPointer)){
+          while(!p1->checkTarget(pMove, xPointer, yPointer)){
               cout<<endl;
               cout<<" ---Invalid Target---"<<endl;
               cout<<"Enter a target(Ex. A3): "<<endl;
               getline(cin, pMove);
           }
           //they have a valid target
-          cout<<p1.checkMove(x, y)<<endl;
-          if (p1.getShipCount() == 0){ //that means player two has won
+          cout<<p1->checkMove(x, y)<<endl;
+          if (p1->getShipCount() == 0){ //that means player two has won
               win = true;
           }
 
@@ -254,45 +287,45 @@ void multiplayerGame(Player p1, Player p2){
 int main()
 {
     cout<<"Welcome to BattleShip!"<<endl;
-    Player p1;
-    Player p2;
-    Computer computer;
+    Player *p1 = new Player();
+    Player *p2 = new Player();
+    Computer *computer = new Computer();
 
-    initialize("Ships.txt", &p1, &p2, &computer);
+    initialize("Ships.txt", p1, p2, computer);
 
     ///to ask if player wants to play
     bool game = playDecision(); //true if player wants to play and false otherwise
-
-    if (game){
-
-    } else {
-      exit(0);
-    }
 
     //Players creating their boards
     if (game){
         int gameType = gameTypeDecision();
 
         if (gameType == 1){ //single player
-            computer.createBoard();
+            computer->createBoard();
+            cout<<endl;
             cout<<endl;
             cout << "BattleAI has placed their ships!" << endl;
             cout<<endl;
-            cout << "Player One's turn to place their ships!" << endl;
-            p1.createBoard();
             cout<<endl;
+            cout << "Player One's turn to place their ships!" << endl;
+            p1->createBoard();
+            cout<<endl;
+
+            singlePlayerRun(p1, computer);
         } else { //multiplayer
             cout<<endl;
             cout << "Player One's turn to place their ships!" << endl;
-            p1.createBoard();
+            p1->createBoard();
             cout<<endl;
-            p1.clearScreen();
+            p1->clearScreen();
             cout << "Player Two's turn to place their ships!" << endl;
-            p2.createBoard();
-            p1.clearScreen();
+            p2->createBoard();
+            p1->clearScreen();
 
-            multiplayerGame(p1, p2);
+            multiPlayerRun(p1, p2);
         }
+    } else {
+      exit(0);
     }
 
 
