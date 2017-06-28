@@ -56,6 +56,8 @@ void Computer::generatePlacement(string dir, int *xPtr, int *yPtr, int length, i
     }
 }
 
+
+
 void Computer::printName(){
     cout << name <<endl;
 }

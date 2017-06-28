@@ -92,6 +92,19 @@ int gameTypeDecision(){
     return decision;
 }
 
+void singlePlayer(Player p1, Computer c){
+  bool win = false;
+
+  while(!win){
+    //5 line buffer
+    cout<<endl;
+    cout<<endl;
+    cout<<endl;
+    cout<<endl;
+    cout<<endl;
+  }
+}
+
 void multiplayerGame(Player p1, Player p2){
   bool win = false;
   ///game begins here
