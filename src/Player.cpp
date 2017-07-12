@@ -312,10 +312,6 @@ int Player::getShipCount(){
     return shipCount;
 }
 
-void Player::printName(){
-    cout << name;
-}
-
 void Player::clearScreen(){
     //5 line buffer
     for (int i = 0; i < 24; i++){
@@ -325,4 +321,8 @@ void Player::clearScreen(){
 
 string Player::getName(){
   return name;
+}
+
+void Player::setName(string n){
+  name = n;
 }

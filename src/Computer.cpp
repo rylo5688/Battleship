@@ -95,9 +95,8 @@ void Computer::attack(Player *p){
     else {
         previousHit = false;
     }
-    printPBoard();
-    cout <<endl;
-    printRBoard();
+
+    clearScreen();
     cout << results << endl;
 }
 

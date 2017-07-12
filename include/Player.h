@@ -27,9 +27,9 @@ class Player
         void printPBoard();
         string checkMove(string n, int c, int r);
         int getShipCount();
-        void printName();
         void clearScreen();
         string getName();
+        void setName(string n);
     protected:
         string name;
         int shipCount;
