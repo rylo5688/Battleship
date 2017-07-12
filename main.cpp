@@ -2,7 +2,6 @@
 #include "include/Ship.h"
 #include "include/Player.h"
 #include "include/Computer.h"
-#include "include/PlayerInfo.h"
 
 #include <iostream>
 #include <stdlib.h>
@@ -135,7 +134,7 @@ void singlePlayerRun(Player *p1, Computer *computer){
         win = true;
     }
 
-    //Computer attack logic 
+    //Computer attack logic
     printNewLine(3);
     computer->attack(p1);
     printNewLine(3);

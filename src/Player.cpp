@@ -187,7 +187,7 @@ bool Player::checkTarget(string c, int *col, int *row){
 }
 
 bool Player::checkTarget(int *x, int *y){
-  if (checkBoard(rBoard, *y, *x) == "X" or checkBoard(rBoard, *y, * x) == "M"){
+  if (checkBoard(rBoard, *y, *x) == "X" or checkBoard(rBoard, *y, *x) == "M"){
       return false;
   }
   return true;
