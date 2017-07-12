@@ -56,7 +56,7 @@ bool Ship::checkShip(int x, int y){
 void Ship::hit(int x, int y){ //assuming that a hit has been made and checkShip has been called
     int n = xCoords.size();
     for (int i = 0; i < n; i++){
-        if (xCoords[i] == x){
+        if (xCoords[i] == x and yCoords[i] == y){
             xCoords.erase(xCoords.begin()+i);
             yCoords.erase(yCoords.begin()+i);
         }

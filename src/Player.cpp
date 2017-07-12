@@ -162,6 +162,7 @@ bool Player::checkCoords(string c, int *col, int *row){
             }
         }
     }
+
     return false;
 }
 
@@ -183,6 +184,13 @@ bool Player::checkTarget(string c, int *col, int *row){
     }
 
     return false;
+}
+
+bool Player::checkTarget(int *x, int *y){
+  if (checkBoard(rBoard, *y, *x) == "X" or checkBoard(rBoard, *y, * x) == "M"){
+      return false;
+  }
+  return true;
 }
 
 bool Player::checkPlacement(string direction, int *col, int *row, int length, int sIndex){
@@ -269,7 +277,7 @@ void Player::printPBoard(){
     pBoard.printBoard();
 }
 
-string Player::checkMove(int c, int r){
+string Player::checkMove(string n, int c, int r){
     string target = checkBoard(pBoard, r, c);
     if (target == "|" or target == "-"){
         pBoard.changeBoard(c, r, "X"); //"X" is a hit
@@ -285,17 +293,18 @@ string Player::checkMove(int c, int r){
         }
         ships[sIndex].hit(c, r); //takes out those ship coordinates
         if (!ships[sIndex].alive()){
-            cout<<"You SANK the enemies "<<ships[sIndex].getName()<<endl;
+            cout<< n <<" SANK " << name << "'s " <<ships[sIndex].getName()<<endl;
             shipCount--;
         }
+
         clearScreen();
-        return "You got a hit!";
+        return n + " got a hit!";
     }
     else{
         clearScreen();
         pBoard.changeBoard(c, r, "M"); //"M" is a miss
         rBoard.changeBoard(c, r, "M"); //"M" is a miss
-        return "You missed!";
+        return n + " missed!";
     }
 }
 
@@ -312,4 +321,8 @@ void Player::clearScreen(){
     for (int i = 0; i < 24; i++){
       cout<<endl;
     }
+}
+
+string Player::getName(){
+  return name;
 }

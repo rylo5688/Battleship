@@ -99,7 +99,7 @@ void printNewLine(int x){
   }
 }
 
-void singlePlayerRun(Player *p1, Computer *c){
+void singlePlayerRun(Player *p1, Computer *computer){
   bool win = false;
 
   string pMove;
@@ -109,7 +109,7 @@ void singlePlayerRun(Player *p1, Computer *c){
     cout<<endl;
 
     cout<<"  --ENEMIES BOARD--"<<endl;
-    c->printRBoard();
+    computer->printRBoard();
     cout<<"--------------------"<<endl;
     p1->printPBoard();
     cout<<"   --P1's BOARD--"<<endl;
@@ -118,27 +118,26 @@ void singlePlayerRun(Player *p1, Computer *c){
     cout<<"Enter a target(Ex. A3): "<<endl;
 
     getline(cin, pMove);
-    int x;
-    int *xPointer = &x;
-    int y;
-    int *yPointer = &y;
+    int *x = new int;
+    int *y = new int;
 
     //attacking the other player
-    while(!c->checkTarget(pMove, xPointer, yPointer)){
+    while(!computer->checkTarget(pMove, x, y)){
         cout<<endl;
         cout<<" ---Invalid Target---"<<endl;
         cout<<"Enter a target(Ex. A3): "<<endl;
         getline(cin, pMove);
     }
     //User has selected a valid target
-    cout<<c->checkMove(x, y)<<endl;
-    if (c->getShipCount() == 0){ //that means player one has won
+    cout<<computer->checkMove(p1->getName(), *x, *y)<<endl;
+
+    if (computer->getShipCount() == 0){ //that means player one has won
         win = true;
     }
 
-    //Computer attack logic
+    //Computer attack logic 
     printNewLine(3);
-    c->attack();
+    computer->attack(p1);
     printNewLine(3);
   }
 }
@@ -165,20 +164,19 @@ void multiPlayerRun(Player *p1, Player *p2){
           cout<<endl;
           cout<<"Enter a target(Ex. A3): "<<endl;
           getline(cin, pMove);
-          int x;
-          int *xPointer = &x;
-          int y;
-          int *yPointer = &y;
+          int *x = new int;
+          int *y = new int;
 
           //attacking the other player
-          while(!p2->checkTarget(pMove, xPointer, yPointer)){
+          while(!p2->checkTarget(pMove, x, y)){
               cout<<endl;
               cout<<" ---Invalid Target---"<<endl;
               cout<<"Enter a target(Ex. A3): "<<endl;
               getline(cin, pMove);
           }
+
           //they have a valid target
-          cout<<p2->checkMove(x, y)<<endl;
+          cout<<p2->checkMove(p1->getName(), *x, *y)<<endl;
           if (p2->getShipCount() == 0){ //that means player one has won
               win = true;
           }
@@ -198,20 +196,18 @@ void multiPlayerRun(Player *p1, Player *p2){
           cout<<endl;
           cout<<"Enter a target(Ex. A3): "<<endl;
           getline(cin, pMove);
-          int x;
-          int *xPointer = &x;
-          int y;
-          int *yPointer = &y;
+          int *x = new int;
+          int *y = new int;
 
           //attacking the other player
-          while(!p1->checkTarget(pMove, xPointer, yPointer)){
+          while(!p1->checkTarget(pMove, x, y)){
               cout<<endl;
               cout<<" ---Invalid Target---"<<endl;
               cout<<"Enter a target(Ex. A3): "<<endl;
               getline(cin, pMove);
           }
           //they have a valid target
-          cout<<p1->checkMove(x, y)<<endl;
+          cout<<p1->checkMove(p2->getName(), *x, *y)<<endl;
           if (p1->getShipCount() == 0){ //that means player two has won
               win = true;
           }
@@ -227,11 +223,7 @@ void multiPlayerRun(Player *p1, Player *p2){
       }
 
       //5 line buffer
-      cout<<endl;
-      cout<<endl;
-      cout<<endl;
-      cout<<endl;
-      cout<<endl;
+      printNewLine(5);
 
       if (!win){
           turn++;
@@ -287,8 +279,8 @@ void multiPlayerRun(Player *p1, Player *p2){
 int main()
 {
     cout<<"Welcome to BattleShip!"<<endl;
-    Player *p1 = new Player();
-    Player *p2 = new Player();
+    Player *p1 = new Player("Player 1");
+    Player *p2 = new Player("Player 2");
     Computer *computer = new Computer();
 
     initialize("Ships.txt", p1, p2, computer);
@@ -324,10 +316,7 @@ int main()
 
             multiPlayerRun(p1, p2);
         }
-    } else {
-      exit(0);
     }
-
 
     return 0;
 }

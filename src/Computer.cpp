@@ -56,7 +56,7 @@ void Computer::generatePlacement(string dir, int *xPtr, int *yPtr, int length, i
     }
 }
 
-void Computer::generateAttack(int *xPtr, int *yPtr){
+void Computer::generateAttack(Player *p, int *xPtr, int *yPtr){
     bool correct = false;
 
     while(!correct){
@@ -68,54 +68,37 @@ void Computer::generateAttack(int *xPtr, int *yPtr){
             *yPtr = rand() % 10 + 1; //plus 1 to compensate for header column
         }
 
-        if (*xPtr <= 0 or *xPtr > 10){
+        if (*xPtr <= 0 or *xPtr > 10){ //out of range generate another number
           continue;
         } else if (*yPtr <= 0 or *yPtr > 10){
           continue;
         }
-        cout<<*xPtr<<" "<<*yPtr<<endl;
-        if (checkBoard(pBoard, *yPtr, *xPtr) == "o"){
+
+        if (p->checkTarget(xPtr, yPtr)){
             correct = true;
         }
     }
-
 }
 
-void Computer::attack(){
-  int *x = new int;
-  int *y = new int;
-  generateAttack(x, y);
+void Computer::attack(Player *p){
+    int *x = new int;
+    int *y = new int;
+    generateAttack(p, x, y);
 
-  string target = checkBoard(pBoard, *x, *y);
-  if (target == "|" or target == "-"){
-      previousHit = true;
-      lastHit[0] = *x;
-      lastHit[1] = *y;
-
-      pBoard.changeBoard(*x, *y, "X"); //"X" is a hit
-      rBoard.changeBoard(*x, *y, "X"); //"X" is a hit
-
-      //getting the index of the ship that was hit
-      int sIndex;
-      for (int i = 0; i < 5; i++){
-          if (ships[i].checkShip(*x, *y)){
-              sIndex = i;
-              break;
-          }
-      }
-      ships[sIndex].hit(*x, *y); //takes out those ship coordinates
-      if (!ships[sIndex].alive()){
-          cout << name << " SANK your " << ships[sIndex].getName() << "!" << endl;
-          shipCount--;
-      }
-      cout << name << " got a hit!" << endl;
-  }
-  else{
-      previousHit = false;
-      pBoard.changeBoard(*x, *y, "M"); //"M" is a miss
-      rBoard.changeBoard(*x, *y, "M"); //"M" is a miss
-      cout << name << " missed!" << endl;
-  }
+    string results = p->checkMove(name, *x, *y);
+    if (results == name + " got a hit!"){ //checking if attack hit
+        cout<<"test"<<endl;
+        previousHit = true;
+        lastHit[0] = *x;
+        lastHit[1] = *y;
+    }
+    else {
+        previousHit = false;
+    }
+    printPBoard();
+    cout <<endl;
+    printRBoard();
+    cout << results << endl;
 }
 
 void Computer::printName(){

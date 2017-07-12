@@ -15,8 +15,8 @@ class Computer: public Player
         void generateCoords(int *x, int *y);
         string generateDirection();
         void generatePlacement(string dir, int *xPtr, int *yPtr, int length, int sIndex);
-        void generateAttack(int *xPtr, int *yPtr);
-        void attack();
+        void generateAttack(Player *p, int *xPtr, int *yPtr);
+        void attack(Player *p);
     protected:
     private:
         int lastHit[2];
