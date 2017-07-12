@@ -46,7 +46,9 @@ Game::Game(string fileName){
 }
 
 Game::~Game(){
-    //dtor
+    delete player1;
+    delete player2;
+    delete computer;
 }
 
 void Game::singlePlayerSetup(){
@@ -83,7 +85,7 @@ void Game::singlePlayerRun(){
     cout << "It's " << player1->getName() << "'s turn" << endl;
     cout<<endl;
 
-    cout<< "  --ENEMIES BOARD--"<<endl;
+    cout << "  --ENEMIES BOARD--" << endl;
     computer->printRBoard();
     cout<< "--------------------"<<endl;
     player1->printPBoard();
@@ -99,8 +101,8 @@ void Game::singlePlayerRun(){
     //attacking the other player
     while(!computer->checkTarget(pMove, x, y)){
         cout<<endl;
-        cout<<" ---Invalid Target---"<<endl;
-        cout<<"Enter a target(Ex. A3): "<<endl;
+        cout << " ---Invalid Target---" << endl;
+        cout << "Enter a target(Ex. A3): " << endl;
         getline(cin, pMove);
     }
     //User has selected a valid target
@@ -113,10 +115,10 @@ void Game::singlePlayerRun(){
     }
 
     string moveOn;
-    cout<<"Enter 'Y' to move onto the next turn: "<<endl;
+    cout << "Enter 'Y' to move onto the next turn: " << endl;
     getline(cin, moveOn);
     while (moveOn != "Y" and moveOn != "y"){
-        cout<<"Enter 'Y' to move onto the next turn: "<<endl;
+        cout << "Enter 'Y' to move onto the next turn: " << endl;
         getline(cin, moveOn);
     }
 
@@ -124,6 +126,36 @@ void Game::singlePlayerRun(){
     printNewLine(3);
     computer->attack(player1);
     printNewLine(3);
+
+    if (player1->getShipCount() == 0){
+        win = true;
+        break;
+    }
+  }
+
+  if (win){
+      if (computer->getShipCount() == 0){ //Player won
+          cout << "Congradulations you beat " << computer->getName() << endl;
+          cout << "Would you like to enter a name to add to the list of winners(Y/N): " << endl;
+          string answer;
+          getline(cin, answer);
+          while (answer != "Y" and answer != "y" and answer != "N" and answer != "n"){
+              cout << "Would you like to enter a name to add to the list of winners(Y/N): " << endl;
+              getline(cin, answer);
+          }
+          if (answer == "y" or answer == "Y"){
+              ofstream winners("winners.txt", ios::app);
+              winners<<player1->getName() + '\n';
+              winners.close();
+              cout << "Thanks for playing!" << endl;
+          }
+          else{
+              cout << "Thanks for playing!" << endl;
+          }
+      } else { //Computer won
+          cout << computer->getName() << " has won." << endl;
+          cout << " Better luck next time!" << endl;
+      }
   }
 }
 
@@ -131,7 +163,7 @@ void Game::multiPlayerSetup(){
     string name;
 
     //First player entering their name and setting up their board
-    cout<<"Enter in your in-game name: ";
+    cout << "Player 1 enter your in-game name: ";
     cin>>name;
     cin.ignore();
     player1->setName(name);
@@ -143,7 +175,8 @@ void Game::multiPlayerSetup(){
     player1->clearScreen();
 
     //Second player entering their name and setting up their board
-    cout<<"Enter in your in-game name: ";
+    player2->clearScreen();
+    cout << "Player 2 enter your in-game name: ";
     cin>>name;
     cin.ignore();
     player2->setName(name);
@@ -166,14 +199,14 @@ void Game::multiPlayerRun(){
           cout << "It's " << player1->getName() << "'s turn" << endl;
 
           cout<<endl;
-          cout<<"  --ENEMIES BOARD--"<<endl;
+          cout <<"  --ENEMIES BOARD--" << endl;
           player2->printRBoard();
           cout<<"--------------------"<<endl;
           player1->printPBoard();
           cout << "   --" << player1->getName() << "'s BOARD--" << endl;
 
           cout<<endl;
-          cout<<"Enter a target(Ex. A3): "<<endl;
+          cout << "Enter a target(Ex. A3): " << endl;
           getline(cin, pMove);
           int *x = new int;
           int *y = new int;
@@ -181,8 +214,8 @@ void Game::multiPlayerRun(){
           //attacking the other player
           while(!player2->checkTarget(pMove, x, y)){
               cout<<endl;
-              cout<<" ---Invalid Target---"<<endl;
-              cout<<"Enter a target(Ex. A3): "<<endl;
+              cout << " ---Invalid Target---" << endl;
+              cout << "Enter a target(Ex. A3): " << endl;
               getline(cin, pMove);
           }
 
@@ -198,14 +231,14 @@ void Game::multiPlayerRun(){
           cout << "It's " << player2->getName() << "'s turn" << endl;
 
           cout<<endl;
-          cout<<"  --ENEMIES BOARD--"<<endl;
+          cout << "  --ENEMIES BOARD--" << endl;
           player1->printRBoard();
-          cout<<"--------------------"<<endl;
+          cout << "--------------------" << endl;
           player2->printPBoard();
           cout << "   --" << player2->getName() << "'s BOARD--" << endl;
 
           cout<<endl;
-          cout<<"Enter a target(Ex. A3): "<<endl;
+          cout << "Enter a target(Ex. A3): " << endl;
           getline(cin, pMove);
           int *x = new int;
           int *y = new int;
@@ -213,8 +246,8 @@ void Game::multiPlayerRun(){
           //attacking the other player
           while(!player1->checkTarget(pMove, x, y)){
               cout<<endl;
-              cout<<" ---Invalid Target---"<<endl;
-              cout<<"Enter a target(Ex. A3): "<<endl;
+              cout << " ---Invalid Target---" << endl;
+              cout << "Enter a target(Ex. A3): " << endl;
               getline(cin, pMove);
           }
           //they have a valid target
@@ -227,10 +260,10 @@ void Game::multiPlayerRun(){
       }
 
       string moveOn;
-      cout<<"Enter 'Y' to move onto the next turn: "<<endl;
+      cout << "Enter 'Y' to move onto the next turn: " << endl;
       getline(cin, moveOn);
       while (moveOn != "Y" and moveOn != "y"){
-          cout<<"Enter 'Y' to move onto the next turn: "<<endl;
+          cout << "Enter 'Y' to move onto the next turn: " << endl;
           getline(cin, moveOn);
       }
 
@@ -243,47 +276,41 @@ void Game::multiPlayerRun(){
   }
   //somebody has won!
   if (turn%2==1){ //Player 1 has won
-      cout<<"Player One has won the game! "<<endl;
-      cout<<"Would you like to enter a name to add to the list of winners(Y/N): "<<endl;
+      cout << player1->getName() << "Player One has won the game!" << endl;
+      cout << "Would you like to enter a name to add to the list of winners(Y/N): " << endl;
       string answer;
       getline(cin, answer);
       while (answer != "Y" and answer != "y" and answer != "N" and answer != "n"){
-          cout<<"Would you like to enter a name to add to the list of winners(Y/N): "<<endl;
+          cout << "Would you like to enter a name to add to the list of winners(Y/N): " << endl;
           getline(cin, answer);
       }
       if (answer == "y" or answer == "Y"){
-          string name;
-          cout<<"Enter your name: "<<endl;
-          getline(cin, name);
           ofstream winners("winners.txt", ios::app);
-          winners<<name;
+          winners<<player1->getName() + '\n';
           winners.close();
-          cout<<"Thanks for playing!"<<endl;
+          cout << "Thanks for playing!" << endl;
       }
       else{
-          cout<<"Thanks for playing!"<<endl;
+          cout << "Thanks for playing!" << endl;
       }
   }
   else if (turn%2==0){ //Player 2 has won the game
-      cout<<"Player Two has won the game! "<<endl;
-      cout<<"Would you like to enter a name to add to the list of winners(Y/N): "<<endl;
+      cout << player2->getName() << " has won the game!" << endl;
+      cout << "Would you like to enter a name to add to the list of winners(Y/N): " << endl;
       string answer;
       getline(cin, answer);
       while (answer != "Y" and answer != "y" and answer != "N" and answer != "n"){
-          cout<<"Would you like to enter a name to add to the list of winners(Y/N): "<<endl;
+          cout << "Would you like to enter a name to add to the list of winners(Y/N): " << endl;
           getline(cin, answer);
       }
       if (answer == "y" or answer == "Y"){
-          string name;
-          cout<<"Enter your name: "<<endl;
-          getline(cin, name);
           ofstream winners("winners.txt", ios::app);
-          winners<<name;
+          winners<<player2->getName() + '\n';
           winners.close();
-          cout<<"Thanks for playing!"<<endl;
+          cout << "Thanks for playing!" << endl;
       }
       else{
-          cout<<"Thanks for playing!"<<endl;
+          cout << "Thanks for playing!" << endl;
       }
   }
 }

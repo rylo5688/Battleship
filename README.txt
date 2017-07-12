@@ -1,15 +1,13 @@
-Ryan Loi
-10/27/16
+Battleship
 
-Compile: g++ -std=c++11 main.cpp src/Ship.cpp src/Player.cpp src/PlayerInfo.cpp src/Board.cpp src/Computer.cpp -o Battleship
-Run: ./Battleship 
+Compile: g++ -g -std=c++11 main.cpp src/Ship.cpp src/Player.cpp src/Board.cpp src/Computer.cpp src/Game.cpp -o Battleship
+Run: ./Battleship Ships
 
 Best if played with the terminal at 80x31 pixels
 
-This game is Battleship!
-There are two players and later to be implemented a mode to play against a computer of a difficulty that the user enters.
-Since there is only a two player mode right now the game goes like this...
-Both players have 5 ships and must place their ships on their 10x10 board.
+This is Battleship in the terminal!
+There are two choices to play, either single player or multiplayer.
+For multiplayer, both players have 5 ships and must place their ships on their 10x10 board.
 The axis' are labeled and the players must enter in the coordinates of where they'd like to place the beginning of their ship.
 Once the player has decided where the beginning of their ship will be placed they will the pick which direction the rest of the ship will go.
 The game makes sure that no ship is placed on top of another and that all of the ship is placed within the coordinate system.
@@ -24,6 +22,8 @@ X's are hits and M's are misses.
 Once a player loses all their ships they have lost!
 The winner gets to choose if they'd like to enter their name into a list of winners file.
 
+Single player is exactly the same thing except the second player is a computer that you play against.
+
 Steps:
 1) Each player must place their ships on their boards
 2) After the boards are finished the actual game will begin
@@ -32,6 +32,3 @@ Steps:
 5) If the target is a "miss" it will get marked as a "M" and the game will tell you that you missed
 6) Once a player destroys all of the other players ships before all theirs die, he/she wins
 7) Winner is asked if they want to enter their name into a document of winners
-
-
-Thanks for playing!
